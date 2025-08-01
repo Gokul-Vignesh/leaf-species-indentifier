@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plant Species Identifier</title>
+</head>
+<body>
+  <h2>🌿 Plant Species Identifier</h2>
+  <p>Select a leaf image and click Predict:</p>
+
+  <form id="uploadForm">
+    <input type="file" name="file" id="fileInput" accept="image/*" required />
+    <button type="submit">Predict</button>
+  </form>
+
+  <div id="previewContainer" style="margin-top: 10px;">
+    <img id="preview" src="#" alt="Image Preview" style="max-width: 300px; display: none;" />
+  </div>
+
+  <div id="result" style="margin-top: 15px; font-weight: bold;"></div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const resultDiv = document.getElementById('result');
+    const preview = document.getElementById('preview');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const file = fileInput.files[0];
+      if (!file) {
+        resultDiv.innerText = "❌ Please select an image file.";
+        return;
+      }
+
+      // Show image preview
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        preview.src = event.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      resultDiv.innerText = "⏳ Predicting...";
+
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.prediction) {
+          resultDiv.innerText = `✅ Predicted Species: ${data.prediction}`;
+        } else {
+          resultDiv.innerText = `⚠️ Error: ${data.error || "Unknown error"}`;
+        }
+      } catch (err) {
+        resultDiv.innerText = `❌ Fetch error: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
