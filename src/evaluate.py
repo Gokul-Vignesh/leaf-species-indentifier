@@ -10,6 +10,7 @@ from .config import MODEL_PATH, RESULTS_DIR
 from .data_loader import get_loaders
 from .model import get_model
 from .config import CLASS_NAMES
+from sklearn.utils.multiclass import unique_labels
 
 def evaluate():
     os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -30,7 +31,9 @@ def evaluate():
             y_pred.extend(preds.numpy())
 
     cm = confusion_matrix(y_true, y_pred)
-    print("Classification Report:\n", classification_report(y_true, y_pred, target_names=classes))
+    labels = sorted(list(unique_labels(y_true, y_pred)))
+    label_names = [classes[i] for i in labels]
+    print("Classification Report:\n", classification_report(y_true, y_pred, target_names=label_names))
 
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt='d', xticklabels=classes, yticklabels=classes, cmap='Blues')

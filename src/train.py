@@ -58,6 +58,9 @@ def train():
             best_acc = val_acc
             torch.save(model.state_dict(), MODEL_PATH)
             print("→ Saved best model")
+    torch.save(model.state_dict(), 'outputs/models/last_model.pth')
+    print("Saved last model to outputs/models/last_model.pth")
+
 
     save_metrics(history, LOG_DIR)
 

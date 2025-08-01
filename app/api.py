@@ -3,12 +3,14 @@
 import os
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
-from app.model_loader import load_model, predict_image
+from app.model_loader import load_model
+from flask_cors import CORS
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
+CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Create uploads folder if it doesn't exist
@@ -45,4 +47,6 @@ def predict():
             return jsonify({'error': str(e)}), 500
     else:
         return jsonify({'error': 'Invalid file format'}), 400
+
+
 

@@ -1,37 +1,27 @@
-# app/model_loader.py
-
 import torch
-import torchvision.transforms as transforms
-from PIL import Image
+import torch.nn as nn
+from torchvision.models import mobilenet_v2, MobileNet_V2_Weights
 import os
 
-# Load your class labels (e.g., Abies concolor, Acer rubrum, etc.)
-CLASS_NAMES = [
-    "Abies concolor", "Acer rubrum", "Quercus alba", "Pinus strobus"
-    # Add more from your dataset...
-]
+def load_model():
+    # Dynamically get number of classes from dataset folder count
+    data_dir = 'data/raw'
+    classes = [d.name for d in os.scandir(data_dir) if d.is_dir()]
+    num_classes = len(classes)
+    print(f"✅ Number of classes detected: {num_classes}")
 
-# Define the transform (should match training)
-transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+    # Load MobileNetV2 with pretrained weights
+    model = mobilenet_v2(weights=MobileNet_V2_Weights.DEFAULT)
+    # Replace classifier with correct output dimension
+    model.classifier[1] = nn.Linear(model.last_channel, num_classes)
 
-# Load the model
-def load_model(model_path='outputs/models/best_model.pth'):
-    model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=False)
-    model.classifier[1] = torch.nn.Linear(model.last_channel, len(CLASS_NAMES))
-    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+    model_path = 'outputs/models/best_model.pth'
+    if os.path.exists(model_path):
+        print(f"📂 Loading model weights from: {model_path}")
+        state_dict = torch.load(model_path, map_location=torch.device('cpu'))
+        model.load_state_dict(state_dict)
+    else:
+        print("⚠️ Model weights file not found, using fresh model.")
+
     model.eval()
     return model
-
-# Predict function
-def predict_image(image_path, model):
-    image = Image.open(image_path).convert('RGB')
-    img_t = transform(image).unsqueeze(0)  # Add batch dimension
-    with torch.no_grad():
-        outputs = model(img_t)
-        _, predicted = torch.max(outputs, 1)
-        return CLASS_NAMES[predicted.item()]
-
