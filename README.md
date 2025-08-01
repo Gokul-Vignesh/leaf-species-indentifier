@@ -38,3 +38,41 @@ plant-species-identifier/
 ├── main.py
 ├── requirements.txt
 └── README.md
+
+🚀 Setup & Usage
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+Preprocess data (optional) & train:
+
+bash
+Copy
+Edit
+python main.py train
+Evaluate model:
+
+bash
+Copy
+Edit
+python main.py eval
+Serve backend:
+
+bash
+Copy
+Edit
+./run_app.sh
+Serve frontend:
+
+bash
+Copy
+Edit
+cd frontend && python3 -m http.server 8000
+📚 Files Description
+src/: core scripts for training, evaluation, and data loading.
+
+app/: Flask backend serving prediction API.
+
+frontend/: HTML/JS UI for user uploads.
+
+main.py: CLI entrypoint.
