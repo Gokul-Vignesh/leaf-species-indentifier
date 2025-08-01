@@ -1,8 +1,23 @@
+# Core Python packages
 numpy
 pandas
 matplotlib
-opencv-python
 scikit-learn
-tensorflow
-flask
+seaborn
 
+# PyTorch and torchvision
+torch>=1.10.0
+torchvision>=0.11.1
+
+# Flask for backend API
+Flask
+werkzeug
+
+# Image processing
+Pillow
+
+# For type hinting and optional CLI tools
+tqdm
+
+# Optional: If you're working in notebooks
+jupyter
