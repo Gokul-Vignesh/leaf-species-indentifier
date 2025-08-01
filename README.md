@@ -1,18 +1,40 @@
-# Leaf Species Identifier 🌿
+# Plant Species Identifier
 
-A machine learning-based web application to identify plant species using images of leaves.
+A college-level plant species identification project using leaf images (Leafsnap dataset).
+
+## 🔍 Overview
+
+- Train a CNN (MobileNetV2) to classify leaf images into species.
+- Flask backend serves predictions via a `/predict` API.
+- Simple frontend for users to upload an image and get predicted species.
 
 ## 📁 Project Structure
 
-
-## 🔧 Features
-- Image classification using CNN
-- Flask web interface for predictions
-- Preprocessing and feature extraction
-- Easily extendable
-
-## 🚀 How to Run
-```bash
-pip install -r requirements.txt
-python src/train_model.py
-python flask_app/app.py
+plant-species-identifier/
+├── data/
+│ ├── raw/
+│ ├── processed/
+│ └── segmented/
+├── notebooks/
+│ └── EDA.ipynb
+├── src/
+│ ├── config.py
+│ ├── data_loader.py
+│ ├── model.py
+│ ├── train.py
+│ ├── evaluate.py
+│ └── utils.py
+├── app/
+│ ├── api.py
+│ └── model_loader.py
+├── frontend/
+│ ├── index.html
+│ ├── styles.css
+│ └── script.js
+├── outputs/
+│ ├── models/
+│ ├── logs/
+│ └── results/
+├── main.py
+├── requirements.txt
+└── README.md
