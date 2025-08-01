@@ -21,3 +21,5 @@ tqdm
 
 # Optional: If you're working in notebooks
 jupyter
+
+flask-cors
